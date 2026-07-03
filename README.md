@@ -1,4 +1,4 @@
-# People Analytics Case Study — Recruitment Process Optimisation
+# People Analytics Case Study - Recruitment Process Optimisation
 
 Analysis of one year of recruitment data to help the Talent Acquisition team
 understand process efficiency, identify funnel bottlenecks, and evaluate the
