@@ -147,4 +147,4 @@ The final write-up (up to 5 slides) is available at
 
 **Denerson** — [github.com/ddenerson](https://github.com/ddenerson)
 
-_Prepared as part of a People Analytics case study.
+Prepared as part of a People Analytics case study.
