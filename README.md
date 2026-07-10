@@ -1,150 +1,118 @@
-# People Analytics Case Study - Recruitment Process Optimisation
+# Recruitment Process Analysis — People Analytics Case Study
 
-Analysis of one year of recruitment data to help the Talent Acquisition team
-understand process efficiency, identify funnel bottlenecks, and evaluate the
-effectiveness of different sourcing channels.
+A People Analytics case study analysing one year of recruitment data to help a
+Talent Acquisition team understand process efficiency, identify funnel
+bottlenecks, and evaluate the effectiveness of their sourcing channels.
 
-> **Status:** In progress. The analysis runs on `applications_data.csv`, which is
-> not versioned in this repository (see [Data](#data)).
+> **Context:** This was a take-home case study for a **Senior Data Analyst –
+> People Analytics** role at **Wise**. It is shared here as a portfolio piece.
 
----
-
-## Context
-
-The Head of Talent Acquisition is preparing for a quarterly business review and
-needs to understand how efficient the recruitment process has been over the last
-year, with a particular focus on two things: **where the process bottlenecks are**
-and **which sourcing channels deliver the best return**.
-
-This project takes a single candidate-level dataset, prepares it for analysis,
-and turns it into a short, decision-oriented narrative for the Talent
-Acquisition team.
 
 ---
+
+## The Brief
+
+The Head of Talent Acquisition was preparing for a quarterly business review and
+needed to understand how efficient the recruitment process had been over the past
+year, with a focus on two things: **where the process bottlenecks are** and
+**which sourcing channels deliver the best return**.
+
+The task was to turn a single candidate-level dataset into a short, decision-ready
+story — delivered as a 5-slide presentation, backed by a reproducible analysis.
 
 ## Business Questions
 
-1. **Sourcing channel effectiveness** — Which channels deliver the best results,
-   evaluated on both the *volume* of hires and the *efficiency* (conversion rate)
-   of candidates from each source?
-2. **Time to fill** — What is the average time to fill a role
-   (`date_requisition_opened` → `date_hired`), and how does it differ across
-   departments?
-3. **Funnel health** — What are the conversion rates between the key stages of
-   the hiring process, and where are the biggest drop-off points?
-4. **Recommendations** — Based on the findings, what are the top 2–3 actionable
-   recommendations to improve the process?
+1. **Sourcing channel effectiveness** — which channels perform best on *volume* of
+   hires and *efficiency* (conversion rate)?
+2. **Time to fill** — average time from requisition opened to hire, and how it
+   varies by department.
+3. **Funnel health** — conversion rates between hiring stages, and where the
+   biggest drop-offs happen.
+4. **Recommendations** — the top actions to improve the process.
+
+---
+
+## Key Findings
+
+**The interview process works — the problem is the entrance.** Once a candidate
+passes the first screen, the funnel converts above 86% at every stage and hiring
+takes about 40 days, uniform across all departments. The losses happen earlier.
+
+1. **The first screen is the real bottleneck.** 82% of all funnel losses happen at
+   the Applied to HR Screen step (only 41% pass). Every later stage is healthy.
+2. **Sourcing is misallocated.** LinkedIn drives most hires, but Employee Referral
+   converts 2.7x better on low volume — while three channels (Agency, Indeed,
+   University Job Board) produced zero hires from 121 applications.
+3. **The funnel has a blind spot.** 55% of candidates have no recorded exit stage,
+   so the true drop-off points can't be fully measured — a data quality gap that
+   is itself a finding.
+4. **The official time-to-fill metric is unreliable**, distorted by a data
+   artifact in the dates; time to hire is used as the trustworthy measure instead.
+
+---
+
+## Approach
+
+The notebook is organised to mirror the final presentation, so it reads
+top-to-bottom as a single narrative:
+
+- **0. Setup & data loading** — load the raw file, first look at shape, types, and
+  missing values.
+- **1. Data preparation** — parse dates, handle data quality issues, and
+  reconstruct the funnel from the terminal-stage field so stage counts are
+  cumulative.
+- **2. Sourcing channels** — volume vs. conversion efficiency.
+- **3. Funnel health** — stage-to-stage conversion and drop-off points.
+- **4. Time to fill** — by department, with a caveat on the distorted metric.
+- **5. Synthesis & recommendations** — turning the numbers into actions.
+
+Every figure in the presentation traces back to a specific cell in the notebook.
 
 ---
 
 ## Repository Structure
 
 ```
-wise_people_analytics_case/
-├── README.md                        # This file
-├── requirements.txt                 # Python dependencies
-├── .gitignore                       # Excludes venv, checkpoints, raw data
+wise-people-analytics-case/
+├── README.md
+├── requirements.txt
+├── docs/
+│   ├── case_brief.pdf          # Original case instructions
+│   └── presentation.pdf        # Final deliverable (5 slides)
 ├── data/
-│   ├── raw/                         # applications_data.csv (not versioned)
-│   └── processed/                   # Prepared data, if persisted
+│   ├── raw/                    # applications_data.csv (not versioned)
+│   └── processed/
 ├── notebooks/
-│   └── recruitment_funnel_analysis.ipynb   # Main analysis, section by section
-├── outputs/
-│   └── figures/                     # Exported charts used in the presentation
-└── docs/
-    ├── case_brief.pdf               # Original case instructions
-    └── presentation.pdf             # Final deliverable (up to 5 slides)
+│   └── recruitment_funnel_analysis.ipynb
+└── outputs/
+    └── figures/                # Exported charts
 ```
-
----
 
 ## Setup
 
-The project uses a virtual environment to isolate dependencies.
-
 ```bash
-# 1. Create and activate the environment
 python3 -m venv venv
 source venv/bin/activate          # Windows: venv\Scripts\activate
-
-# 2. Install dependencies
 pip install -r requirements.txt
-
-# 3. Launch Jupyter
 jupyter lab
 ```
 
 Then open `notebooks/recruitment_funnel_analysis.ipynb` and run the cells in order.
 
----
-
 ## Data
 
-The analysis expects a single candidate-level file, `applications_data.csv`,
-placed in `data/raw/`. **This file is intentionally not committed** — it contains
-candidate-level personal data, so it is excluded via `.gitignore`.
-
-Each row represents one candidate's application for a specific role.
-
-| Column | Description |
-| --- | --- |
-| `application_id` | Unique identifier for each application |
-| `candidate_id` | Unique identifier for each candidate |
-| `job_id` | Unique identifier for the job requisition |
-| `job_title` | e.g. "Data Scientist", "Sales Executive" |
-| `department` | e.g. "Technology", "Sales", "Marketing" |
-| `job_level` | e.g. "Associate", "Senior", "Manager" |
-| `application_date` | Date the candidate applied |
-| `source` | Channel the candidate applied through (LinkedIn, Employee Referral, Careers Site, Agency, University Job Board) |
-| `current_stage` | The final stage the candidate reached in the process |
-| `date_offer_extended` | Date an offer was made (blank if not applicable) |
-| `date_hired` | Date the candidate was hired (blank if not applicable) |
-| `date_requisition_opened` | Date the job was first opened |
+The analysis expects a candidate-level file, `applications_data.csv`, in
+`data/raw/`. It is **not committed**, as it contained candidate personal data.
+Each row represented one candidate's application for a role, with fields for the
+job, department, source channel, current stage, and key dates (application, offer,
+hire, requisition opened).
 
 ---
 
-## Approach
+## Tools
 
-The notebook is organised to mirror the structure of the final presentation, so
-the analysis reads top-to-bottom as a single narrative:
-
-- **0. Setup & data loading** — imports, load the raw file, first look at shape,
-  types, and missing values.
-- **1. Data preparation** — parse dates, standardise categorical values, and
-  reconstruct the recruitment funnel from the terminal-stage field so that stage
-  counts are cumulative.
-- **2. Sourcing channels** *(→ Slide 2)* — volume vs. conversion efficiency.
-- **3. Funnel health** *(→ Slide 3)* — stage-to-stage conversion and drop-off
-  points.
-- **4. Time to fill** *(→ Slide 4)* — by department (mean and median).
-- **5. Synthesis & recommendations** *(→ Slides 5 & 1)* — turning the numbers
-  into actions.
-
-A note on the funnel: `current_stage` records only the *furthest* stage each
-candidate reached, so the number of candidates "entering" a given stage is
-computed cumulatively (everyone whose furthest stage is that stage or later).
-
----
-
-## Key Findings
-
-_To be completed once the analysis is run._
-
-1. …
-2. …
-3. …
-
----
-
-## Deliverable
-
-The final write-up (up to 5 slides) is available at
-[`docs/presentation.pdf`](docs/presentation.pdf).
-
----
+Python (pandas), Matplotlib / Seaborn, Jupyter, Git.
 
 ## Author
 
-**Denerson** — [github.com/ddenerson](https://github.com/ddenerson)
-
-Prepared as part of a People Analytics case study.
+**Denerson Silva** — [github.com/ddenerson](https://github.com/ddenerson)
