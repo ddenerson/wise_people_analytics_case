@@ -1,10 +1,10 @@
-# Recruitment Process Analysis — People Analytics Case Study
+# Recruitment Process Analysis - People Analytics Case Study
 
 A People Analytics case study analysing one year of recruitment data to help a
 Talent Acquisition team understand process efficiency, identify funnel
 bottlenecks, and evaluate the effectiveness of their sourcing channels.
 
-> **Context:** This was a take-home case study for a **Senior Data Analyst –
+> **Context:** This was a take-home case study for a **Senior Data Analyst -
 > People Analytics** role at **Wise**. It is shared here as a portfolio piece.
 
 
@@ -18,7 +18,7 @@ year, with a focus on two things: **where the process bottlenecks are** and
 **which sourcing channels deliver the best return**.
 
 The task was to turn a single candidate-level dataset into a short, decision-ready
-story — delivered as a 5-slide presentation, backed by a reproducible analysis.
+story - delivered as a 5-slide presentation, backed by a reproducible analysis.
 
 ## Business Questions
 
